@@ -5,13 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Correo confirmado · Doope</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .centro { text-align: center; padding-top: 48px; }
+    .logo { height: 44px; margin-bottom: 32px; }
+    .logo-oscuro { display: none; }
+    @media (prefers-color-scheme: dark) {
+      .logo-claro { display: none; }
+      .logo-oscuro { display: inline-block; }
+    }
+    .icono { font-size: 56px; line-height: 1; margin-bottom: 16px; }
+    .boton {
+      display: inline-block; margin-top: 24px; padding: 14px 32px; border-radius: 999px;
+      background: var(--texto); color: var(--fondo); font-weight: 700; text-decoration: none;
+    }
+    .solo-movil { display: none; }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>¡Correo confirmado!</h1>
-    <p>Tu cuenta de Doope ya está activa. Vuelve a la app e inicia sesión con tu correo y tu contraseña.</p>
-    <p>Si no has creado tú esta cuenta, puedes ignorar este mensaje.</p>
+  <main class="centro">
+    <img class="logo logo-claro" src="logo-doope-negro.png" alt="Doope">
+    <img class="logo logo-oscuro" src="logo-doope-blanco.png" alt="Doope">
+
+    <div id="bien">
+      <div class="icono">✅</div>
+      <h1>¡Correo confirmado!</h1>
+      <p>Tu cuenta de Doope ya está activa. Vuelve a la app e inicia sesión con tu correo y tu contraseña.</p>
+      <a id="abrir" class="boton solo-movil" href="doope://">Abrir Doope</a>
+      <p style="color: var(--suave); font-size: 14px; margin-top: 32px;">Si no has creado tú esta cuenta, puedes ignorar este mensaje.</p>
+    </div>
+
+    <div id="mal" style="display: none;">
+      <div class="icono">⚠️</div>
+      <h1>Este enlace ya no sirve</h1>
+      <p>Ha caducado o ya se usó. Abre Doope, entra con tu correo y pulsa «Reenviar correo» para recibir uno nuevo.</p>
+    </div>
+
     <footer>Contacto: <a href="mailto:m.741.app@gmail.com">m.741.app@gmail.com</a></footer>
   </main>
+
+  <script>
+    // Si el enlace llega con un error (caducado, usado), se avisa en vez de felicitar.
+    var parametros = window.location.hash + '&' + window.location.search;
+    if (/error/i.test(parametros)) {
+      document.getElementById('bien').style.display = 'none';
+      document.getElementById('mal').style.display = 'block';
+    }
+    // En Android, el botón abre la app directamente.
+    if (/Android/i.test(navigator.userAgent)) {
+      var boton = document.getElementById('abrir');
+      boton.href = 'intent://#Intent;scheme=doope;package=com.m741app.doope;end';
+      boton.className = 'boton';
+    }
+  </script>
 </body>
 </html>
